@@ -1,0 +1,35 @@
+title = "crmleaf/payroll-core"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "laravel-sanctum-token"
+description = "Laravel Sanctum / personal access token (id|plaintext)"
+regex = '''\b\d+\|[A-Za-z0-9]{38,}\b'''
+tags = ["laravel", "sanctum", "token"]
+
+[[rules]]
+id = "laravel-app-key"
+description = "Laravel APP_KEY"
+regex = '''base64:[A-Za-z0-9+/]{40,}={0,2}'''
+tags = ["laravel", "key"]
+
+[[rules]]
+id = "hardcoded-bearer-in-client"
+description = "Bearer token literal in client-side source"
+regex = '''(?i)(authorization|bearer)\s*[:=]\s*["'][A-Za-z0-9._\-|]{20,}["']'''
+path = '''\.(js|jsx|ts|tsx|vue|svelte|blade\.php)$'''
+tags = ["client", "token"]
+
+[allowlist]
+description = "Documentation placeholders and test fixtures"
+regexes = [
+  '''(?i)(your|example|placeholder|dummy|xxx+|<[a-z-]+>)[-_]?(token|key|secret)''',
+  '''sk_test_[A-Za-z0-9]+''',
+]
+paths = [
+  '''docs/.*\.md$''',
+  '''.*README\.md$''',
+  '''\.gitleaks\.toml$''',
+]

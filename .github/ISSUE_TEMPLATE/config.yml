@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/crmleaf/payroll-js/security/advisories/new
+    about: Report privately. Please do not open a public issue.
+  - name: A tool built on this package
+    url: https://github.com/crmleaf
+    about: Payslips, invoices and the other tools each have their own repository.

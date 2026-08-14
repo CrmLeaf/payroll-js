@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Embedding the CRMLeaf payroll calculators in plain HTML</title>
+
+<!--
+  This file is the whole demonstration. Open it in a browser - no server, no build
+  step, no npm install - and every calculator below works.
+
+  There is exactly one script tag. Everything else on the page is markup.
+-->
+
+<style>
+  /* The host page's own styling. None of it reaches inside the widgets, and
+     nothing inside them leaks out here - that is what the shadow root is for. */
+  :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0 auto;
+    padding: 2rem 1.25rem 5rem;
+    max-width: 68rem;
+    font: 16px/1.6 Georgia, "Iowan Old Style", "Times New Roman", serif;
+    color: #1d242c;
+    background: #fbfaf7;
+  }
+  h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 0.4rem; letter-spacing: -0.02em; }
+  h2 { font-size: 1.25rem; margin: 3rem 0 0.35rem; letter-spacing: -0.01em; }
+  h2 .badge {
+    font: 600 0.6rem/1 system-ui, sans-serif;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    vertical-align: 0.35em;
+    margin-left: 0.5rem;
+    padding: 0.3em 0.5em;
+    border-radius: 999px;
+    background: #e5ded1;
+    color: #5e5342;
+  }
+  p { margin: 0 0 1rem; max-width: 42rem; }
+  .lede { font-size: 1.1rem; color: #46525f; }
+  pre {
+    font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background: #1d242c;
+    color: #e8eef4;
+    padding: 0.9rem 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 0 0 1.25rem;
+  }
+  .grid { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+  .fallback {
+    display: none;
+    padding: 1rem 1.15rem;
+    border-left: 4px solid #b3541e;
+    background: #fdf1e7;
+    font: 15px/1.55 system-ui, sans-serif;
+  }
+  .fallback code { background: #f4e2d3; padding: 0.1em 0.35em; border-radius: 3px; }
+  footer { margin-top: 4rem; font: 14px/1.6 system-ui, sans-serif; color: #6b7683; }
+
+  /* Theming a widget is a matter of setting custom properties on it. They cross
+     the shadow boundary; ordinary selectors do not. */
+  .branded {
+    --payroll-accent: #7a3ea8;
+    --payroll-radius: 2px;
+    --payroll-surface: #f5f0fa;
+    --payroll-border: #ddd0ea;
+    --payroll-font: "Inter", system-ui, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body { background: #12161b; color: #e6ebf1; }
+    .lede { color: #a8b6c4; }
+    h2 .badge { background: #2a3138; color: #b6c2cd; }
+    .fallback { background: #2a1d13; border-left-color: #d4762e; }
+    .fallback code { background: #3a2a1c; }
+    .branded { --payroll-surface: #221a2c; --payroll-border: #3b2d4a; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Payroll calculators, embedded in a plain HTML file</h1>
+<p class="lede">
+  One script tag, then ordinary markup. Every figure below is computed in the
+  browser from the same statutory rate tables the PHP package uses, and every one
+  of them will show you its working.
+</p>
+
+<!--
+  ── The one line of setup ────────────────────────────────────────────────────
+  Local build (what this file uses, so it works straight out of the repository):
+-->
+<script src="../dist/payroll.min.js"></script>
+<!--
+  From a CDN, for a page that is not sitting next to a checkout:
+
+  <script src="https://unpkg.com/@crmleaf/payroll-js/dist/payroll.min.js"></script>
+
+  Either way the script registers the custom elements and upgrades any
+  data-payroll placeholder as soon as the document is ready.
+-->
+
+<div class="fallback" id="fallback">
+  <strong>The bundle has not been built yet.</strong>
+  Run <code>npm install &amp;&amp; npm run build</code> inside
+  <code>packages/payroll-js</code> and reload - or swap the script tag for the
+  unpkg URL in the comment above, which needs no build at all.
+</div>
+
+<h2>Mode C - a custom element<span class="badge">no javascript</span></h2>
+<p>
+  Write the tag. That is the entire integration. The widget renders into a shadow
+  root, so this page's serif body font and cream background cannot reach inside
+  it, and its styles cannot escape onto this page.
+</p>
+<pre>&lt;payroll-gratuity-calculator&gt;&lt;/payroll-gratuity-calculator&gt;</pre>
+
+<payroll-gratuity-calculator></payroll-gratuity-calculator>
+
+<h2>Starting values as attributes</h2>
+<p>
+  Every field can be seeded from an attribute - the field name in kebab-case. Useful
+  when the surrounding page already knows something about the visitor.
+</p>
+<pre>&lt;payroll-pf-calculator basic-salary="52000" employer-restricts-to-ceiling="false"&gt;&lt;/payroll-pf-calculator&gt;</pre>
+
+<payroll-pf-calculator basic-salary="52000" employer-restricts-to-ceiling="false"></payroll-pf-calculator>
+
+<h2>The <code>data-payroll</code> form<span class="badge">for cms editors</span></h2>
+<p>
+  Plenty of WYSIWYG editors strip tags they do not recognise but leave a
+  <code>div</code> alone. This form survives them.
+</p>
+<pre>&lt;div data-payroll="esi-calculator" gross-wages="17777"&gt;&lt;/div&gt;</pre>
+
+<div data-payroll="esi-calculator" gross-wages="17777"></div>
+
+<h2>Theming</h2>
+<p>
+  Custom properties are the supported surface. Set them on the element - or on any
+  ancestor - and the widget picks them up.
+</p>
+<pre>.branded { --payroll-accent: #7a3ea8; --payroll-radius: 2px; }</pre>
+
+<div class="branded">
+  <payroll-bonus-calculator monthly-wages="18000" days-worked="240"></payroll-bonus-calculator>
+</div>
+
+<h2>Two side by side</h2>
+<div class="grid">
+  <payroll-tds-calculator monthly-gross="106250"></payroll-tds-calculator>
+  <payroll-leave-encashment-calculator></payroll-leave-encashment-calculator>
+</div>
+
+<h2>The rest of the suite</h2>
+<div class="grid">
+  <payroll-ctc-calculator annual-ctc="1800000"></payroll-ctc-calculator>
+  <payroll-fnf-calculator></payroll-fnf-calculator>
+  <payroll-epfo-penalty-calculator></payroll-epfo-penalty-calculator>
+  <payroll-roi-calculator></payroll-roi-calculator>
+  <payroll-savings-calculator></payroll-savings-calculator>
+</div>
+
+<h2>A document rather than a calculator<span class="badge">gst</span></h2>
+<p>
+  The invoice generator is the same deal: one tag, no build step. Change the place
+  of supply to a state other than Karnataka and watch the tax move from CGST plus
+  SGST to a single IGST line - that switch follows from the place of supply and is
+  not a setting anyone gets to choose.
+</p>
+<pre>&lt;payroll-invoice-generator buyer-state="Maharashtra"&gt;&lt;/payroll-invoice-generator&gt;</pre>
+
+<div class="grid">
+  <payroll-invoice-generator hide-workings></payroll-invoice-generator>
+  <payroll-invoice-generator buyer-state="Maharashtra" hide-workings></payroll-invoice-generator>
+</div>
+
+<h2>A calendar rather than a sum</h2>
+<payroll-compliance-calendar financial-year="2025-26" hide-workings></payroll-compliance-calendar>
+
+<h2>Mode B - the same bundle, used as a library</h2>
+<p>
+  The global <code>Payroll</code> carries every calculator, so a page can compute a
+  figure without rendering a widget at all. Below is the result of calling it
+  directly, written into the page by the script at the bottom of this file.
+</p>
+<pre>const { gratuity, workings } = Payroll.calculateGratuity({
+  lastDrawnSalary: 45000,
+  yearsOfService: 7,
+  monthsOfService: 7,   // more than six months rounds the year up
+});</pre>
+
+<p id="scripted">…</p>
+
+<h2>Listening to a widget</h2>
+<p>
+  Each widget dispatches <code>payroll:result</code> every time it recalculates, so
+  the host page can mirror a figure, log it, or send it onward.
+</p>
+<p id="mirror">Change the CTC above and this line follows it.</p>
+
+<footer>
+  <p>
+    <strong>@crmleaf/payroll-js</strong> - MIT licensed. The rate tables are
+    generated from <code>packages/payroll-core/resources/rates/*.json</code>, which
+    is also what the PHP engine reads, so the two agree to the paisa.
+  </p>
+  <p>
+    These calculators are an aid, not advice. Verify against the statute and the
+    relevant notification before relying on a figure for a filing.
+  </p>
+</footer>
+
+<script>
+  // Everything above works without this block. It exists to show the library API.
+  (function () {
+    if (typeof Payroll === 'undefined') {
+      document.getElementById('fallback').style.display = 'block';
+      document.getElementById('scripted').textContent =
+        'The bundle is not loaded, so there is nothing to compute with.';
+      return;
+    }
+
+    var result = Payroll.calculateGratuity({
+      lastDrawnSalary: 45000,
+      yearsOfService: 7,
+      monthsOfService: 7
+    });
+
+    document.getElementById('scripted').textContent =
+      result.explain() + '  (' + result.workings.length + ' steps, ' +
+      result.citations.length + ' citation' + (result.citations.length === 1 ? '' : 's') + ')';
+
+    var ctc = document.querySelector('payroll-ctc-calculator');
+    var mirror = document.getElementById('mirror');
+
+    ctc.addEventListener('payroll:result', function (event) {
+      mirror.textContent =
+        'Net in hand, from the CTC calculator above: ' + event.detail.result.headline.value;
+    });
+  })();
+</script>
+
+</body>
+</html>

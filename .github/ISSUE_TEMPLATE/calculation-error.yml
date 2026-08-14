@@ -1,0 +1,67 @@
+name: Incorrect calculation
+description: A calculator returns a figure you believe is statutorily wrong.
+title: "[calc] "
+labels: ["bug", "calculation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A wrong statutory figure is the most important kind of bug this package
+        can have.
+
+        The most useful thing you can give us is the rule that says we are
+        wrong. Inputs plus expected output plus a citation is a test case;
+        without the citation we are comparing opinions about the law.
+  - type: input
+    id: calculator
+    attributes:
+      label: Which calculator
+      placeholder: "GratuityCalculator"
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      placeholder: "crmleaf/payroll-core 1.0.0"
+    validations:
+      required: true
+  - type: input
+    id: financial-year
+    attributes:
+      label: Financial year the figure applies to
+      placeholder: "2025-26"
+    validations:
+      required: true
+  - type: textarea
+    id: inputs
+    attributes:
+      label: Inputs
+      render: php
+      placeholder: |
+        (new GratuityCalculator())->calculate(
+            lastDrawnSalary: Money::fromRupees(45000),
+            yearsOfService: 7,
+            monthsOfService: 8,
+        );
+    validations:
+      required: true
+  - type: input
+    id: actual
+    attributes:
+      label: Figure you got
+    validations:
+      required: true
+  - type: input
+    id: expected
+    attributes:
+      label: Figure you expected
+    validations:
+      required: true
+  - type: textarea
+    id: citation
+    attributes:
+      label: Statutory basis for the expected figure
+      description: The section, notification, circular or gazette entry. A link is perfect.
+    validations:
+      required: true

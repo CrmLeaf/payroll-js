@@ -1,0 +1,185 @@
+{
+  "name": "@crmleaf/payroll-js",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Indian payroll calculators that show their working - CTC, TDS, EPF, ESI, gratuity, bonus, leave encashment, F&F, EPFO penalties, the compliance calendar, payslips, GST invoices and salary templates. Tree-shakeable ESM, a single-file UMD build for plain HTML, and zero-JavaScript embeddable web components.",
+  "keywords": [
+    "payroll",
+    "india",
+    "epf",
+    "esi",
+    "tds",
+    "gst",
+    "invoice",
+    "payslip",
+    "gratuity",
+    "bonus",
+    "ctc",
+    "salary-calculator",
+    "web-components",
+    "typescript"
+  ],
+  "license": "MIT",
+  "author": "CRMLeaf <opensource@crmleaf.app> (https://www.crmleaf.app)",
+  "homepage": "https://github.com/crmleaf/payroll-tools/tree/main/packages/payroll-js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crmleaf/payroll-tools.git",
+    "directory": "packages/payroll-js"
+  },
+  "bugs": {
+    "url": "https://github.com/crmleaf/payroll-tools/issues"
+  },
+  "sideEffects": [
+    "./dist/browser.js",
+    "./dist/browser.cjs",
+    "./dist/payroll.js",
+    "./dist/payroll.min.js"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "unpkg": "./dist/payroll.min.js",
+  "jsdelivr": "./dist/payroll.min.js",
+  "browser": "./dist/payroll.min.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./ctc": {
+      "types": "./dist/calculators/ctc.d.ts",
+      "import": "./dist/calculators/ctc.js",
+      "require": "./dist/calculators/ctc.cjs"
+    },
+    "./tds": {
+      "types": "./dist/calculators/tds.d.ts",
+      "import": "./dist/calculators/tds.js",
+      "require": "./dist/calculators/tds.cjs"
+    },
+    "./pf": {
+      "types": "./dist/calculators/pf.d.ts",
+      "import": "./dist/calculators/pf.js",
+      "require": "./dist/calculators/pf.cjs"
+    },
+    "./esi": {
+      "types": "./dist/calculators/esi.d.ts",
+      "import": "./dist/calculators/esi.js",
+      "require": "./dist/calculators/esi.cjs"
+    },
+    "./gratuity": {
+      "types": "./dist/calculators/gratuity.d.ts",
+      "import": "./dist/calculators/gratuity.js",
+      "require": "./dist/calculators/gratuity.cjs"
+    },
+    "./bonus": {
+      "types": "./dist/calculators/bonus.d.ts",
+      "import": "./dist/calculators/bonus.js",
+      "require": "./dist/calculators/bonus.cjs"
+    },
+    "./leave-encashment": {
+      "types": "./dist/calculators/leave-encashment.d.ts",
+      "import": "./dist/calculators/leave-encashment.js",
+      "require": "./dist/calculators/leave-encashment.cjs"
+    },
+    "./fnf": {
+      "types": "./dist/calculators/fnf.d.ts",
+      "import": "./dist/calculators/fnf.js",
+      "require": "./dist/calculators/fnf.cjs"
+    },
+    "./epfo-penalty": {
+      "types": "./dist/calculators/epfo-penalty.d.ts",
+      "import": "./dist/calculators/epfo-penalty.js",
+      "require": "./dist/calculators/epfo-penalty.cjs"
+    },
+    "./compliance-calendar": {
+      "types": "./dist/calculators/compliance-calendar.d.ts",
+      "import": "./dist/calculators/compliance-calendar.js",
+      "require": "./dist/calculators/compliance-calendar.cjs"
+    },
+    "./roi": {
+      "types": "./dist/calculators/roi.d.ts",
+      "import": "./dist/calculators/roi.js",
+      "require": "./dist/calculators/roi.cjs"
+    },
+    "./savings": {
+      "types": "./dist/calculators/savings.d.ts",
+      "import": "./dist/calculators/savings.js",
+      "require": "./dist/calculators/savings.cjs"
+    },
+    "./income-tax": {
+      "types": "./dist/calculators/income-tax.d.ts",
+      "import": "./dist/calculators/income-tax.js",
+      "require": "./dist/calculators/income-tax.cjs"
+    },
+    "./professional-tax": {
+      "types": "./dist/calculators/professional-tax.d.ts",
+      "import": "./dist/calculators/professional-tax.js",
+      "require": "./dist/calculators/professional-tax.cjs"
+    },
+    "./payslip": {
+      "types": "./dist/calculators/payslip.d.ts",
+      "import": "./dist/calculators/payslip.js",
+      "require": "./dist/calculators/payslip.cjs"
+    },
+    "./invoice": {
+      "types": "./dist/calculators/invoice.d.ts",
+      "import": "./dist/calculators/invoice.js",
+      "require": "./dist/calculators/invoice.cjs"
+    },
+    "./salary-templates": {
+      "types": "./dist/calculators/salary-templates.d.ts",
+      "import": "./dist/calculators/salary-templates.js",
+      "require": "./dist/calculators/salary-templates.cjs"
+    },
+    "./money": {
+      "types": "./dist/money.d.ts",
+      "import": "./dist/money.js",
+      "require": "./dist/money.cjs"
+    },
+    "./rates": {
+      "types": "./dist/rates/index.d.ts",
+      "import": "./dist/rates/index.js",
+      "require": "./dist/rates/index.cjs"
+    },
+    "./elements": {
+      "types": "./dist/ui/elements.d.ts",
+      "import": "./dist/ui/elements.js",
+      "require": "./dist/ui/elements.cjs"
+    },
+    "./browser": {
+      "types": "./dist/browser.d.ts",
+      "import": "./dist/browser.js",
+      "require": "./dist/browser.cjs"
+    },
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "examples/embed.html",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "rates:generate": "node scripts/generate-rates.mjs",
+    "prebuild": "npm run rates:generate",
+    "build": "tsup && node scripts/build-umd.mjs",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.test.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "tsup": "^8.3.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.10",
+    "happy-dom": "^15.11.6",
+    "@types/node": "^26.2.0"
+  }
+}

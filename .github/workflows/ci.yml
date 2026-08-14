@@ -1,0 +1,118 @@
+name: CI
+
+# The TypeScript port of the CRMLeaf payroll engine. It carries its own copy of
+# the statutory rate tables, generated verbatim from crmleaf/payroll-core and
+# committed, so nothing here needs PHP.
+#
+# The bundle is built before the suite runs: several tests load
+# dist/payroll.min.js and render a real page against it, and they skip silently
+# when it is absent. Skipping the browser tests in CI would defeat the point of
+# having them.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['20', '22', '24']
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+          cache-dependency-path: package.json
+      - run: npm install --no-audit --no-fund
+      - run: npm run build
+      - run: npm test
+
+  typecheck:
+    name: Types
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: package.json
+      - run: npm install --no-audit --no-fund
+      - run: npm run typecheck
+
+  rate-tables:
+    name: Rate tables are the committed ones
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: package.json
+      - run: npm install --no-audit --no-fund
+      # src/rates/tables.ts is generated from crmleaf/payroll-core. That package
+      # is not present here, so the generator keeps the committed file and this
+      # asserts the build did not quietly rewrite it - a silently regenerated
+      # table would be an unreviewed change to a statutory figure.
+      - name: Building leaves the committed rate tables untouched
+        run: |
+          npm run build
+          if ! git diff --quiet -- src/rates/tables.ts; then
+            echo "::error::src/rates/tables.ts changed during the build."
+            git diff --stat -- src/rates/tables.ts
+            exit 1
+          fi
+          echo "src/rates/tables.ts is unchanged"
+
+  package:
+    name: Package metadata
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: package.json
+      - run: npm install --no-audit --no-fund
+      # `npm pack --dry-run` resolves the `files` field and every `exports`
+      # subpath. A subpath pointing at a file the tarball does not carry is an
+      # import error for the consumer and nothing at all for us.
+      - run: npm pack --dry-run
+
+  secret-scan:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Scan the history for committed credentials
+        run: |
+          docker run --rm -v "$GITHUB_WORKSPACE:/repo" -w /repo \
+            zricethezav/gitleaks:latest detect --source=/repo \
+            --config=/repo/.gitleaks.toml --redact --exit-code=1

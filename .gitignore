@@ -1,0 +1,8 @@
+/node_modules/
+/dist/
+/coverage/
+*.tsbuildinfo
+.vite/
+.vite-temp/
+npm-debug.log*
+.DS_Store

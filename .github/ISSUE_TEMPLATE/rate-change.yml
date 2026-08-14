@@ -1,0 +1,52 @@
+name: Statutory rate change
+description: A rate, slab, ceiling or limit has changed in law.
+title: "[rates] "
+labels: ["rates", "compliance"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this when the law itself changed. If a figure was wrong all along,
+        that is the **Incorrect calculation** template instead.
+  - type: dropdown
+    id: table
+    attributes:
+      label: Which table
+      options:
+        - Income tax
+        - Provident fund
+        - State insurance
+        - Gratuity
+        - Bonus
+        - Leave encashment
+        - Professional tax
+        - Provident fund penalties
+        - Goods and services tax
+        - Compliance calendar
+    validations:
+      required: true
+  - type: input
+    id: effective-from
+    attributes:
+      label: Effective from
+      description: The date the change takes effect in law, not the announcement date.
+      placeholder: "2026-04-01"
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: What changed
+      description: Old value, new value, and who it applies to.
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source
+      description: >
+        Gazette notification number, circular reference, or Finance Act section.
+        This is copied verbatim into the table's source field, so please make it
+        precise.
+    validations:
+      required: true
